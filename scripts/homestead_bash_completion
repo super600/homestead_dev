@@ -1,0 +1,17 @@
+# Bash Completion for Homestead Bash CLI
+
+_complete_homestead_bash() {
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    local prev="${COMP_WORDS[COMP_CWORD-1]}"
+    local first="${COMP_WORDS[COMP_CWORD-1]}"
+    local commands=$(homestead help | awk '/Commands\:/,/Options\:/' | \grep -E -o "^\s{2}\w+\t" | tr -d ' ' | tr -d "\t")
+
+    if [ $COMP_CWORD == 1 ]; then
+        COMPREPLY=($(compgen -W "${commands}" -- ${cur}))
+    fi
+
+    return 0
+}
+
+complete -F _complete_homestead_bash homestead
+
